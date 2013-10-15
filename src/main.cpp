@@ -4,6 +4,9 @@
 #include <stdio.h>
 #include <math.h>
 #include <memory.h>
+#include "input.h"
+#include "game.h"
+#include "system.h"
 
 #define PI 3.141592653589793238462643383
 
@@ -25,15 +28,12 @@ int main( int argc, char **argv )
 
 	ModeX_Init( renderer );
 
-	while ( 1 )
+	for ( ;; )
 	{
-		SDL_Event e;
-		if ( SDL_PollEvent( &e ) )
-		{
-			if ( e.type == SDL_QUIT )
-				break;
-		}
-
+		Input_Frame();
+		if ( !System_HandleEvents() )
+			break;
+		Game_Frame();
 		Render_Frame();
 		ModeX_Present( renderer );
 		SDL_RenderPresent( renderer );
@@ -68,7 +68,7 @@ void Render_DrawFOV()
 	float pd;
 
 	static float t = -49.0f;
-	static float dt = 0.1;
+	static float dt = 0.1f;
 
 	//t += dt;
 	if ( t > 49.0f || t < -49.0f)
@@ -76,8 +76,8 @@ void Render_DrawFOV()
 		dt = -dt;
 	}
 
-	px = sin( t * PI / 180.0f );
-	py = cos( t * PI / 180.0f );
+	px = sinf( t * (float)PI / 180.0f );
+	py = cosf( t * (float)PI / 180.0f );
 	pd = 100.0f;
 
 	for ( column = 0; column < MODEX_SCREEN_WIDTH; column++ )
@@ -88,14 +88,14 @@ void Render_DrawFOV()
 		float h;
 		float theta;
 		
-		theta = ((int)column - (int)MODEX_SCREEN_WIDTH / 2) * (60.0f / (float)MODEX_SCREEN_WIDTH) * (PI / 180.0f);
+		theta = ((int)column - (int)MODEX_SCREEN_WIDTH / 2) * (60.0f / (float)MODEX_SCREEN_WIDTH) * ((float)PI / 180.0f);
 		vx = sin( theta );
 		vy = cos( theta );
 		vd = pd * (px * vx + py * vy);
 		h = vd / cos( theta );
 
 		//printf( "%03d %f %f\n", column, vd, h );
-		Render_DrawColumn( column, h );
+		Render_DrawColumn( column, (int)h );
 	}
 }
 
