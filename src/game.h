@@ -4,5 +4,6 @@
 void Game_Initialize();
 void Game_Shutdown();
 void Game_Frame();
+float *Game_GetView();
 
 #endif // #ifndef __GAME_H__

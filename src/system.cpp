@@ -19,7 +19,7 @@ bool System_HandleEvents()
 
 			memset( &event, 0, sizeof( InputEvent ) );
 			event.type = EVENT_PRESS;
-			event.key = e.key.keysym.sym;
+			event.key = e.key.keysym.scancode;
 			Input_PushEvent( &event );
 		}	
 		else if ( e.type == SDL_KEYUP )
@@ -28,7 +28,7 @@ bool System_HandleEvents()
 
 			memset( &event, 0, sizeof( InputEvent ) );
 			event.type = EVENT_RELEASE;
-			event.key = e.key.keysym.sym;
+			event.key = e.key.keysym.scancode;
 			Input_PushEvent( &event );
 		}
 	}
